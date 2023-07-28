@@ -1,0 +1,50 @@
+<style>
+    .prod-desc {
+      display: flex;
+      align-items: flex-end;
+    }
+  
+    .prod-image {
+      margin-right: 20px;
+    }
+  </style>
+  
+  <div class="container">
+    <div class="page-nav cont-w">
+      <div id="sub-container" class="cont-w">
+        <div class="sub-info product-view bx">
+          <div class="row">
+            <div class="col-md-6 prod-image">
+              <span class="bx prod-image-b">
+                <img src="호밀빵.jpg" class="card-img-top" alt="호밀빵" style="max-height: 280px; width: 415px;">
+              </span>
+            </div>
+            <div class="col-md-6 prod-desc">
+              <p class="desc">
+                1. 중량: 130g<br />
+                2. 포장단위: 6개<br />
+                3. 냉동(-18℃ 이하)보관 / 2시간 냉장해동<br />
+                4. 유통기한: 별도 표시일까지<br />
+                5. 해동 후 재냉동 금지
+              </p>
+              <p class="price red">
+              </p>
+              <div class="order-form viewpage">
+                <form method="post" name="" id="act-form-direct" action="/order/order.html">
+                  <input type="hidden" name="prod_no" id="prod_no" value="1010100903" />
+                  <input type="hidden" name="product_unit_price" value="17700" />
+  
+                  <button type="button" class="num-op" data-add="-1"><i class='ion-minus'></i></button>
+                  <input type="text" name="qty" value="1" data-def="1" class="num-in red ct" id="act-buy-num" />
+                  <button type="button" class="num-op" data-add="1"><i class='ion-plus'></i></button>
+                  <button type="button" class="btn btn01 basket act-cart act-check-login">장바구니 담기</button>
+                  <!--button type="button" class="btn btn01 act-direct act-check-login act-check-notpaid-order">바로 구매</button-->
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

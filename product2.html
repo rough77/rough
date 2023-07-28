@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>의자 상세 페이지</title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="hero" style="background-color: #ffcc00;">
+          <a href="index.html" style="color: black; text-decoration: none;"><b>HOME</b></a> &nbsp;&nbsp;&nbsp;
+          <a href="cart.html" style="color: black; text-decoration: none;"><b>CART</b></a>
+        </div>
+      </div>
+
+  <h1>의자 상세 페이지</h1>
+
+  <h2>의자 상품 정보</h2>
+  <p>상품명: 의자</p>
+  <p>가격: 10,000원</p>
+  <p>색상: 검정</p>
+  <p>재질: 목재, 천</p>
+  <p>크기: 40cm x 40cm x 80cm</p>
+  
+  <h2>의자 상세 설명</h2>
+  <p>이 의자는 편안하고 견고한 목재와 부드러운 천으로 제작되었습니다. 간단한 디자인과 검정색으로 어떤 공간에도 잘 어울리며, 실용적인 크기로 다양한 공간에서 사용할 수 있습니다.</p>
+  
+  <h2>의자 상세 이미지</h2>
+  <img src="https://source.unsplash.com/1600x900/?rice-cooker" alt="의자 이미지" width="300">
+
+  <h2>의자 구매</h2>
+  <p>의자를 구매하시려면 아래의 버튼을 클릭하세요.</p>
+  <button onclick="addToCart('의자')">장바구니에 추가</button>
+
+  <script>
+    // 상품을 장바구니에 추가하는 함수
+    function addToCart(item) {
+      var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+
+      if (!cartItems) {
+        cartItems = []; // 장바구니가 비어있으면 빈 배열로 초기화
+      }
+
+      cartItems.push(item.toString());
+
+      // 변경된 장바구니 정보를 로컬 스토리지에 저장
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+      alert('장바구니에 추가되었습니다.');
+      window.location.href = 'cart.html'; // 장바구니 페이지로 이동
+
+    }
+  </script>
+</body>
+</html>
