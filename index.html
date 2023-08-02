@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>디저트 테이블</title>
+    <link rel="stylesheet" href="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/easygpt/default.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+        <style>
+                .hero {
+        background-color: orange;
+        height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0;
+        margin-top: 0; /* hero와 메뉴 사이의 여백을 없앰 */
+        
+               } 
+      
+            .card {
+                transition: transform 0.3s ease-in-out;
+            }
+        
+            .card:hover {
+                transform: scale(1.05);
+            }
+        </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+        
+</head>
+
+<body>
+  <script>
+  // localStorage.clear(); //상품 클리어 
+   function addToCart(product) {
+    var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    cartItems.push(product.toString()); // 상품을 문자열로 변환하여 장바구니에 추가
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    alert(product + "을(를) 장바구니에 담았습니다.");
+    window.location.href = 'cart.html'; // cart.html로 이동
+    
+    // 장바구니 개수 업데이트
+    var cartCount = document.getElementById('cartCount');
+    cartCount.textContent = cartItems.length.toString(); // 문자열로 변환하여 할당
+  }
+
+  // 페이지 로드 시 장바구니 개수 업데이트
+  var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  var cartCount = document.getElementById('cartCount');
+  cartCount.textContent = cartItems.length.toString(); // 문자열로 변환하여 할당
+</script>
+
+
+   
+
+<style>
+  .hero {
+      margin-bottom: 0;
+      margin-top: 0;
+  }
+  
+  .navbar-right {
+      justify-content: flex-end;
+  }
+</style>
+
+<style>
+  body {
+    margin-top: 0;
+    padding: 0;
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-12 mx-auto d-flex justify-content-center">
+      <img src="logo.jpg" alt="케이크" class="img-fluid" style="max-height: 200px; width: 800; display: block; margin: 0" onclick="window.location.href='index.html'" >
+    </div>
+  </div>
+ 
+</div>
+
+<div class="row">
+  <div class="col-md-4 mx-auto">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" id="searchTerm" placeholder="상품을 검색하세요" aria-label="상품 검색"> &nbsp;&nbsp;
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" style="background-color: pink;" onclick="search()">검색</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+
+ 
+<script>
+  function search() {
+    var searchTerm = document.getElementById("searchTerm").value.toLowerCase();
+    
+    if (searchTerm === "") {
+      alert("검색어를 입력해주세요.");
+    } else {
+      // 페이지 유무 확인을 위한 예시 함수
+      var pageUrl = findPageUrl(searchTerm);
+      
+      if (pageUrl !== "") {
+        window.location.href = pageUrl;
+      } else {
+        alert("해당 상품이 없습니다.");
+      }
+    }
+  }
+  
+  // 페이지 URL 찾기 함수
+  function findPageUrl(searchTerm) {
+    var validTerms = {
+      "호밀빵": "https://rough77.github.io/rough/호밀빵.html",
+      "초콜릿": "http://example.com/초콜릿.html",
+      "과자": "http://example.com/과자.html"
+      // 다른 검색 가능한 상품과 URL을 추가할 수 있습니다.
+    };
+    
+    for (var term in validTerms) {
+      if (term.includes(searchTerm)) {
+        return validTerms[term];
+      }
+    }
+    
+    return "";
+  }
+</script>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark mt-4" style="background-color: pink;">
+  <div class="container d-flex justify-content-between">
+    <div class="navbar-collapse">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="bakery.html" style="color: white; font-weight: bold;">Bakery</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="cookie.html" style="color: white; font-weight: bold;">Cookie</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="cake.html" style="color: white; font-weight: bold;">Cake</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="beverage.html" style="color: white; font-weight: bold;">Beverage</a>
+        </li>
+      </ul>
+    </div>
+    <div class="navbar-collapse justify-content-end" style="text-align: right;">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="member.html" style="color: white; font-weight: bold;">회원가입</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="cart.html" style="color: white; font-weight: bold;">장바구니</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="login.html" style="color: white; font-weight: bold;">로그인</a>
+        </li>
+      </ul>
+     
+    </div>
+  </div>
+</nav>
+
+
+
+
+
+
+<div class="container mt-5">
+  <div class="row">
+    <h3 class="text-center" style="font-family: 'Arial';">BEST 3</h3>
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <a href="호밀빵.html">
+          <img src="호밀빵.jpg" class="card-img-top" alt="호밀빵" style="max-height: 280px; width: 415px;">
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">호밀빵</h5>
+          <h6 class="card-subtitle mb-2 text-muted">4,000원 </h6>
+          
+          <a href="#" class="btn btn-primary" onclick="addToCart('호밀빵')" style="background-color: lightgray; border-color:rgb(99, 98, 98); color: #000000">장바구니 담기</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <a href="마카다미아.html">
+          <img src="마카다미아쿠키.jpg" class="card-img-top" alt="마카다미아쿠키" style="max-height: 280px; width: 415px;">
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">마카다미아 쿠키</h5>
+          <h6 class="card-subtitle mb-2 text-muted">3,500원</h6>
+          
+          <a href="#" class="btn btn-primary" onclick="addToCart('마카다미아쿠키')" style="background-color: lightgray; border-color:rgb(99, 98, 98); color: #000000" >장바구니 담기</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <a href="모히또.html">
+          <img src="모히또.jpg" class="card-img-top" alt="모히또" style="max-height: 280px; width: 415px;" >
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">무알콜 모히또 </h5>
+          <h6 class="card-subtitle mb-2 text-muted">5000원</h6>
+         
+          <a href="#" class="btn btn-primary" onclick="addToCart('무알콜모히또')" style="background-color: lightgray; border-color:rgb(99, 98, 98); color: #000000">장바구니 담기</a>
+        </div>
+      </div>
+    </div
+  </div>
+</div>
+            
+           
+            <!-- 다른 상품들 추가 -->
+        </div>
+    </div>
+    
+    
+    <div class="container mt-5">
+        <div class="row">
+            <h3 class="text-center" style="font-family: 'Arial';">NEW</h3>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <a href="product1.html">
+              <img src="2cm 식빵.jpg" class="card-img-top" alt="2cm식빵" style="max-height: 280px; width: 415px;">
+              </a>
+              <div class="card-body">
+                <h5 class="card-title">2cm 두께 식빵</h5>
+                <h6 class="card-subtitle mb-2 text-muted">4,500원</h6>
+                
+                <a href="#" class="btn btn-primary" onclick="addToCart('전기밥솥')" style="background-color: lightgray; border-color:rgb(99, 98, 98); color: #000000 ">장바구니 담기</a>
+              
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <a href="product2.html">
+              <img src="초코칩쿠키.jpg" class="card-img-top" alt="초코칩쿠키" style="max-height: 280px; width: 415px;"> </a>
+              <div class="card-body">
+                <h5 class="card-title">초코칩쿠키</h5>
+                <h6 class="card-subtitle mb-2 text-muted">3,000원</h6>
+               
+                <a href="#" class="btn btn-primary" onclick="addToCart('의자')" style="background-color: lightgray; border-color:rgb(99, 98, 98); color: #000000">장바구니 담기</a>
+               
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <div class="card">
+              <a href="product3.html">
+              <img src="크루아상.jpg" class="card-img-top" alt="크루아상" style="max-height: 280px; width: 415px;"> </a>
+              <div class="card-body">
+                <h5 class="card-title">크루아상</h5>
+                <h6 class="card-subtitle mb-2 text-muted">3,000원</h6>
+               
+                <a href="#" class="btn btn-primary" onclick="addToCart('노트북')" style="background-color: lightgray; border-color:rgb(99, 98, 98); color: #000000">장바구니 담기</a>
+                
+              </div>
+            </div>
+          </div>
+          <div class="container mt-5">
+            <div class="row">
+                <h3 class="text-center" style="font-family: 'Arial';">SALE</h3>
+                <div class="col-md-4 mb-4">
+                  <div class="card">
+                    <a href="product1.html">
+                    <img src="모닝빵.jpg" class="card-img-top" alt="2cm식빵" style="max-height: 280px; width: 415px;">
+                    </a>
+                    <div class="card-body">
+                      <h5 class="card-title">모닝빵</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">4,500원</h6>
+                      
+                      <a href="#" class="btn btn-primary" onclick="addToCart('전기밥솥')" style="background-color: lightgray; border-color:rgb(99, 98, 98); color: #000000">장바구니 담기</a>
+                    
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                  <div class="card">
+                    <a href="product2.html">
+                    <img src="컵케잌.jpg" class="card-img-top" alt="초코칩쿠키" style="max-height: 280px; width: 415px;"> </a>
+                    <div class="card-body">
+                      <h5 class="card-title">컵케잌</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">6,000원</h6>
+                     
+                      <a href="#" class="btn btn-primary" onclick="addToCart('의자')" style="background-color: lightgray; border-color:rgb(99, 98, 98); color: #000000">장바구니 담기</a>
+                     
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                  <div class="card">
+                    <a href="product2.html">
+                    <img src="마카다미아쿠키.jpg" class="card-img-top" alt="마카다미아쿠키" style="max-height: 280px; width: 415px;"> </a>
+                    <div class="card-body">
+                      <h5 class="card-title">마카다미아쿠키</h5>
+                      <h6 class="card-subtitle mb-2 text-muted">4,000원</h6>
+                                           <a href="#" class="btn btn-primary" onclick="addToCart('의자')" style="background-color: lightgray; border-color:rgb(99, 98, 98); color: #000000">장바구니 담기</a>
+                     
+                    </div>
+                  </div>
+                </div>
+        </div>
+      </div>
+      </div>
+      </div>
+
+      
+</body>
+
+</html>
