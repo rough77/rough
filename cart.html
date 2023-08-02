@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>장바구니</title>
+</head>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    padding: 20px;
+  }
+
+  h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    background-color: #eee;
+    color: #333;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #ccc;
+  }
+
+  #totalPrice {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+</style>
+<body style="background-color: white;">
+  <style>
+    .hero {
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+    
+    .navbar-right {
+        justify-content: flex-end;
+    
+    .sandwich-image {
+         margin-top: 20px; /* 호밀빵 이미지 위 여백 */
+          
+    .navbar {
+        margin-bottom: 20px;
+    }
+    </style>
+    
+    <style>
+    body {
+      margin-top: 0;
+      padding: 0;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        background-color: #a62058; /* 연두색으로 변경 */
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    
+      .btn:hover {
+        background-color: #a8a4a5; /* 호버 시 색상 변경 */
+    </style>
+    
+    <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-12 mx-auto d-flex justify-content-center">
+      <a href="index1.html">
+        <img src="logo.jpg" alt="케이크" class="img-fluid" style="max-height: 200px; display: block; margin: 0 auto;" onclick="window.location.href='index.html'">
+    </a>
+    </div>
+    </div>
+   </div>
+
+
+
+  <h1>장바구니</h1>
+  <ul id="cartItems">
+
+    <!-- 여기에 각 상품의 누적 개수와 가격이 표시됩니다 -->
+  </ul>
+  <p id="totalPrice"></p>
+  <button onclick="removeSelectedItems()" style="color: #000000";>선택상품삭제</button>
+  <button onclick="removeSelectedItems()" style="color: #000000";>주문하기</button>
+  <script>
+   
+   // 장바구니 개수와 가격 표시 함수
+    function displayCartItems() {
+      var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+
+      if (cartItems && cartItems.length > 0) {
+        var cartList = document.getElementById('cartItems');
+        cartList.innerHTML = '';
+
+        var countMap = {};
+        var priceMap = {};
+        var totalPrice = 0;
+
+        // 각 상품의 누적 개수와 가격 계산
+        cartItems.forEach(function(item) {
+          countMap[item] = (countMap[item] || 0) + 1;
+          priceMap[item] = (priceMap[item] || 0) + calculatePrice(item);
+          totalPrice += calculatePrice(item);
+
+          
+    
+        });
+
+
+  // 누적 개수와 가격 표시
+  Object.keys(countMap).forEach(function (item) {
+    var li = document.createElement('li');
+
+    // 체크박스 생성 및 설정
+    var checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = item;
+    checkbox.name = 'selectedItems';
+
+    var label = document.createElement('label');
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(item));
+
+    li.appendChild(label);
+
+    // 수정: 개수와 가격 표시를 하나의 요소로 감싸기
+    var quantityElement = document.createElement('span');
+    quantityElement.textContent = ' (개수: ' + countMap[item] + ', 가격: ' + priceMap[item].toLocaleString() + '원)';
+    li.appendChild(quantityElement);
+
+    // 수정: '-' 버튼 클릭 이벤트 추가
+    var decreaseButton = document.createElement('button');
+    decreaseButton.textContent = '-';
+    decreaseButton.addEventListener('click', function () {
+      decreaseQuantity(item); // 개수를 1 감소시키는 함수 호출
+      displayCartItems(); // 장바구니 다시 표시
+    });
+
+    // 수정: '+' 버튼 클릭 이벤트 추가 (기존 코드에서 이동)
+    var increaseButton = document.createElement('button');
+    increaseButton.textContent = '+';
+    increaseButton.addEventListener('click', function () {
+      increaseQuantity(item);
+      displayCartItems();
+    });
+
+    li.appendChild(decreaseButton); // '-' 버튼 추가
+    li.appendChild(increaseButton); // '+' 버튼 추가
+    cartList.appendChild(li);
+  });
+       
+         
+     // 총 가격 계산 및 표시
+    var totalPrice = calculateTotalPrice(cartItems);
+    var totalPriceElement = document.getElementById('totalPrice');
+    totalPriceElement.textContent = '총 가격: ' + totalPrice + '원';
+
+    // 총 가격이 0원인 경우 장바구니를 비워줍니다.
+    if (totalPrice === 0) {
+      clearCart();
+    }
+  } else {
+    var cartList = document.getElementById('cartItems');
+    cartList.innerHTML = '';
+    var totalPriceElement = document.getElementById('totalPrice');
+    totalPriceElement.textContent = '총 가격: 0원';
+
+    // 장바구니가 비어있는 경우 로컬 스토리지에서도 장바구니를 비워줍니다.
+    clearCart();
+  }
+}
+
+// 장바구니 비우기 함수
+function clearCart() {
+  localStorage.removeItem('cartItems');
+}
+
+    // 각 상품의 가격 계산
+    function calculatePrice(item) {
+      // 여기에서 상품 가격 계산 로직을 구현합니다.
+      // 예시로 고정된 가격을 사용하도록 했습니다.
+      var price;
+
+      switch (item) {
+        case '호밀빵':
+          price = 4000;
+          break;
+        case '마카다미아쿠키':
+          price = 3500;
+          break;
+        case '무알콜모히또':
+          price = 5000;
+          break;
+        case '청소기':
+          price = 200000;
+          break;
+        default:
+          price = 0;
+          break;
+      }
+
+      return price;
+    }
+
+// 선택상품삭제 버튼 클릭 시 동작하는 함수
+function removeSelectedItems() {
+      var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+
+      // 선택된 체크박스의 값을 가져옵니다.
+      var selectedItems = [];
+      var checkboxes = document.querySelectorAll('input[name="selectedItems"]:checked');
+
+      checkboxes.forEach(function(checkbox) {
+        selectedItems.push(checkbox.value);
+      });
+
+      // 선택한 항목을 장바구니에서 제거합니다.
+      cartItems = cartItems.filter(function(item) {
+        return !selectedItems.includes(item);
+      });
+
+      // 변경된 장바구니 정보를 로컬 스토리지에 저장합니다.
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+      // 장바구니를 다시 표시합니다.
+      displayCartItems();
+    }
+    
+    // 상품 개수를 확인하는 함수
+    function getQuantity(item) {
+      var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+      var count = 0;
+
+      if (cartItems) {
+        count = cartItems.filter(function(value) {
+          return value === item;
+        }).length;
+      }
+
+      return count;
+    }
+
+    // 페이지 로드 시 장바구니 개수와 가격 표시
+    window.onload = function() {
+      displayCartItems();
+    }
+
+    // 장바구니 목록에서 상품을 삭제하는 함수
+    function removeCartItem(item) {
+      var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+
+      if (cartItems && cartItems.length > 0) {
+        var index = cartItems.indexOf(item);
+        
+        if (index > -1) {
+          cartItems.splice(index, 1);
+          localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        }
+      }
+    }
+  
+// 개수를 1 감소시키는 함수
+function decreaseQuantity(item) {
+  var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+
+  // 선택한 상품의 개수를 1 감소
+  var index = cartItems.indexOf(item);
+  if (index > -1) {
+    cartItems.splice(index, 1);
+  }
+
+  // 변경된 장바구니 정보를 로컬 스토리지에 저장
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
+}
+   
+    
+  // 상품 개수를 1씩 증가시키는 함수
+  function addToCart(item) {
+    var cartItems = JSON.parse(localStorage.getItem('cartItems'));
+
+    if (!cartItems) {
+      cartItems = []; // 장바구니가 비어있으면 빈 배열로 초기화
+    }
+
+    cartItems.push(item.toString());
+
+    // 변경된 장바구니 정보를 로컬 스토리지에 저장
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+    // 장바구니 다시 표시
+    displayCartItems();
+  }
+
+  // + 버튼을 클릭했을 때 상품 개수를 1씩 증가시키는 함수
+  function increaseQuantity(item) {
+    addToCart(item); // 상품을 장바구니에 추가
+  }
+
+
+
+    // 페이지 로드 시 장바구니 개수와 가격 표시
+    window.onload = function() {
+      displayCartItems();
+    }
+  </script>
+</body>
+</html>
