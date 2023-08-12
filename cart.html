@@ -1,107 +1,192 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>장바구니</title>
-</head>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
-    padding: 20px;
-  }
-
-  h1 {
-    color: #333;
-    margin-bottom: 20px;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-
-  button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #eee;
-    color: #333;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background-color: #ccc;
-  }
-
-  #totalPrice {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
-  }
-</style>
-<body style="background-color: white;">
-  <style>
-    .hero {
-        margin-bottom: 0;
-        margin-top: 0;
-    }
-    
-    .navbar-right {
-        justify-content: flex-end;
-    
-    .sandwich-image {
-         margin-top: 20px; /* 호밀빵 이미지 위 여백 */
-          
-    .navbar {
-        margin-bottom: 20px;
-    }
-    </style>
-    
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>장바구니</title>
+    <link rel="stylesheet" href="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/easygpt/default.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <style>
-    body {
-      margin-top: 0;
-      padding: 0;
+        /* 기존 스타일 유지 */
+
+        /* 추가된 스타일 */
+        #searchPostalButton {
+      display: inline-block;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
     }
-    
-    .btn {
-        padding: 10px 20px;
-        background-color: #a62058; /* 연두색으로 변경 */
-        border: none;
-        color: #fff;
-        font-size: 16px;
-        cursor: pointer;
-      }
-    
-      .btn:hover {
-        background-color: #a8a4a5; /* 호버 시 색상 변경 */
+
+        .content {
+            margin-left: 1000px;
+        } 
+
+        /* 메뉴 바 아래 여백 설정 */
+    .navbar {
+      margin-bottom: 25px;
+    }
     </style>
-    
-    <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-12 mx-auto d-flex justify-content-center">
-      <a href="index1.html">
-        <img src="logo.jpg" alt="케이크" class="img-fluid" style="max-height: 200px; display: block; margin: 0 auto;" onclick="window.location.href='index.html'">
-    </a>
-    </div>
-    </div>
-   </div>
+    <script>
+        // localStorage.clear(); //상품 클리어 
+        function addToCart(product) {
+            var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            cartItems.push(product.toString()); // 상품을 문자열로 변환하여 장바구니에 추가
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            alert(product + "을(를) 장바구니에 담았습니다.");
+            window.location.href = 'cart.html'; // cart.html로 이동
+
+            // 장바구니 개수 업데이트
+            var cartCount = document.getElementById('cartCount');
+            cartCount.textContent = cartItems.length.toString(); // 문자열로 변환하여 할당
+        }
+
+        // 페이지 로드 시 장바구니 개수 업데이트
+        var cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        var cartCount = document.getElementById('cartCount');
+        cartCount.textContent = cartItems.length.toString(); // 문자열로 변환하여 할당
+
+        // 우편번호 검색을 위한 함수
+        function searchPostalCode() {
+            // 다음 우편번호 API 사용 예시
+            // https://postcode.map.daum.net/guide
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 선택한 주소를 입력창에 삽입
+                    document.getElementById('address').value = data.address;
+                }
+            }).open();
+        }
+
+        function search() {
+            var searchTerm = document.getElementById("searchTerm").value.toLowerCase();
+
+            if (searchTerm === "") {
+                alert("검색어를 입력해주세요.");
+            } else {
+                // 페이지 유무 확인을 위한 예시 함수
+                var pageUrl = findPageUrl(searchTerm);
+
+                if (pageUrl !== "") {
+                    window.location.href = pageUrl;
+                } else {
+                    alert("해당 상품이 없습니다.");
+                }
+            }
+        }
+
+        // 페이지 URL 찾기 함수
+        function findPageUrl(searchTerm) {
+            var validTerms = {
+                "호밀빵": "https://rough77.github.io/rough/호밀빵.html",
+                "초콜릿": "http://example.com/초콜릿.html",
+                "과자": "http://example.com/과자.html"
+                // 다른 검색 가능한 상품과 URL을 추가할 수 있습니다.
+            };
+
+            for (var term in validTerms) {
+                if (term.includes(searchTerm)) {
+                    return validTerms[term];
+                }
+            }
+
+            return "";
+        }
+    </script>
+    <style>
+        .hero {
+            background-color: orange;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0;
+            margin-top: 0; /* hero와 메뉴 사이의 여백을 없앰 */
+        } 
+
+        .card {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+       
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+      <div class="row">
+          <div class="col-md-12 mx-auto d-flex justify-content-center">
+              <img src="logo.jpg" alt="케이크" class="img-fluid" style="max-height: 200px; width: 800; display: block; margin: 0" onclick="window.location.href='index.html'" >
+          </div>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="col-md-4 mx-auto">
+          <div class="input-group mb-3">
+              <input type="text" class="form-control" id="searchTerm" placeholder="상품을 검색하세요" aria-label="상품 검색">
+              <div class="input-group-append">
+                  <button class="btn btn-primary" type="button" style="background-color: pink;" onclick="search()">검색</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark mt-4" style="background-color: pink;">
+      <div class="container d-flex justify-content-between">
+          <div class="navbar-collapse">
+              <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a class="nav-link" href="bakery.html" style="color: white; font-weight: bold;">Bakery</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="cookie.html" style="color: white; font-weight: bold;">Cookie</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="cake.html" style="color: white; font-weight: bold;">Cake</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="beverage.html" style="color: white; font-weight: bold;">Beverage</a>
+                  </li>
+              </ul>
+          </div>
+          <div class="navbar-collapse justify-content-end" style="text-align: right;">
+              <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a class="nav-link" href="join.html" style="color: white; font-weight: bold;">회원가입</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="cart.html" style="color: white; font-weight: bold;">장바구니</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="login.html" style="color: white; font-weight: bold;">로그인</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
 
 
-
+  <div class="container">
   <h1>장바구니</h1>
+  
   <ul id="cartItems">
 
     <!-- 여기에 각 상품의 누적 개수와 가격이 표시됩니다 -->
   </ul>
+  
   <p id="totalPrice"></p>
   <button onclick="removeSelectedItems()" style="color: #000000";>선택상품삭제</button>
   <button onclick="removeSelectedItems()" style="color: #000000";>주문하기</button>
@@ -305,7 +390,7 @@ function decreaseQuantity(item) {
       cartItems = []; // 장바구니가 비어있으면 빈 배열로 초기화
     }
 
-    cartItems.push(item.toString());
+    cartItems.push(item.toString().trim());
 
     // 변경된 장바구니 정보를 로컬 스토리지에 저장
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
