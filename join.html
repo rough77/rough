@@ -141,6 +141,19 @@
     
     return "";
   }
+
+        // 우편번호 검색을 위한 함수
+        function searchPostalCode() {
+            // 다음 우편번호 API 사용 예시
+            // https://postcode.map.daum.net/guide
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    // 선택한 주소를 입력창에 삽입
+                    document.getElementById('address').value = data.address;
+                }
+            }).open();
+        }
+    
 </script>
 
 
@@ -202,11 +215,12 @@
             <br> <br>  
 
             <label for="confirm_password">전화번호</label>
-            <input type="password" id="confirm_password" name="confirm_password" required style="display: inline-block">
+            <input type="password" id="tel_number" name="tel_number" required style="display: inline-block">
             <br> <br>  
-            <label for="confirm_password">집 주소</label>
-            <input type="password" id="confirm_password" name="confirm_password" required style="display: inline-block">
-            <br> <br>  
+            <label for="address">주소:</label>
+            <input type="text" id="address" name="address" required style="display: inline-block">
+            <button type="button" id="searchPostalButton" onclick="searchPostalCode()">우편번호 검색</button>
+            <br>
            
             <input type="submit" value="가입하기" style="display: inline-block">
         </div>
